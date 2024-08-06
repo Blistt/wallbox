@@ -25,7 +25,7 @@ export default function UploadImage() {
     });
 
     if (response.ok) {
-      setResultImage('/public/' + selectedFile.name);
+      setResultImage('/public/uploaded_images/' + selectedFile.name);
     } else {
       console.error('Error uploading image');
     }

@@ -37,3 +37,5 @@ __pycache__
 
 # data
 /public/uploaded_images
+/dataset
+api/knnmodels

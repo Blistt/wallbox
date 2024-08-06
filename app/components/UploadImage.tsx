@@ -25,7 +25,8 @@ export default function UploadImage() {
     });
 
     if (response.ok) {
-      setResultImage('/public/uploaded_images/' + selectedFile.name);
+      const data = await response.json();
+      setResultImage(data.filePath);
     } else {
       console.error('Error uploading image');
     }

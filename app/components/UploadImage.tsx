@@ -1,8 +1,7 @@
 "use client";
 import { useState } from 'react';
-import Image from 'next/image';
 
-export default function UploadImage() {
+export default function UploadImage({ onUpload }: { onUpload: () => void }) {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [resultImage, setResultImage] = useState<string | null>(null);
 
@@ -27,6 +26,7 @@ export default function UploadImage() {
     if (response.ok) {
       const data = await response.json();
       setResultImage(data.filePath);
+      onUpload(); // Clear the filenames state
     } else {
       console.error('Error uploading image');
     }
@@ -43,7 +43,7 @@ export default function UploadImage() {
         />
         <button 
           type="submit" 
-          className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-900 transition-colors duration-300"
+          className="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-950 transition-colors duration-300"
         >
           Upload
         </button>
@@ -51,7 +51,7 @@ export default function UploadImage() {
       {resultImage && (
         <div className="mt-4">
           <h2 className="text-xl font-semibold">Uploaded Image:</h2>
-          <Image 
+          <img 
             src={resultImage} 
             alt="Uploaded" 
             width={500} 

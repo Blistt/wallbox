@@ -12,6 +12,7 @@ def get_knn_for_query(query_embedding, knnbr, filenames):
   # GETS THE IMAGES OF THE KNN
   knn_filenames = []
   # Retrieve the k nearest neighbor images of the query image 
+  print(f'there are {len(filenames)} filenames')
   for i in knn[1][0][1:]:
     knn_filenames.append(filenames[i])
 

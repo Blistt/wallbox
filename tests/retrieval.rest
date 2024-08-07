@@ -3,5 +3,5 @@ Content-Type: application/json
 
 {
   "query_path": "public/uploaded_images/",
-  "image_embedding_path": "dataset/images/embeddings/23"
+  "image_embedding_path": "dataset/embeddings/23"
 }

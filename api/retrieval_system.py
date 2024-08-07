@@ -9,7 +9,7 @@ import traceback
 
 app = Flask(__name__)
 
-def retrieve_images(query_path='test_image/', image_embedding_path='dataset/images/embeddings/23'):
+def retrieve_images(query_path='test_image/', image_embedding_path='dataset/embeddings/23'):
     try:
         # Load deep learning feature extractor
         print('Loading VGG19 model...')
@@ -47,7 +47,7 @@ def retrieve_images(query_path='test_image/', image_embedding_path='dataset/imag
 @app.route("/api/retrieve_images", methods=["POST"])
 def api_retrieve_images():
     query_path = request.json.get('query_path', 'public/uploaded_images/')
-    image_embedding_path = request.json.get('image_embedding_path', 'dataset/images/embeddings/23')
+    image_embedding_path = request.json.get('image_embedding_path', 'dataset/embeddings/23')
     try:
         knn_emb_filenames = retrieve_images(query_path, image_embedding_path)
         return jsonify({"status": "success", "retrieved_images": knn_emb_filenames})

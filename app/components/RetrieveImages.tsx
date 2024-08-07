@@ -10,7 +10,7 @@ export default function RetrieveImagesButton({ onRetrieve }: { onRetrieve: (file
       },
       body: JSON.stringify({
         query_path: 'public/uploaded_images/',
-        image_embedding_path: 'public/dataset/images',
+        image_path: 'public/dataset/images/',
       }),
     });
 

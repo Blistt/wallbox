@@ -9,9 +9,9 @@ import joblib
 import traceback
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # Enable CORS for all routes
 
-def retrieve_images(query_path='test_image/', image_embedding_path='dataset/embeddings/23'):
+def retrieve_images(query_path='public/uploaded_images/', image_embedding_path='public/dataset/embeddings/23'):
     try:
         # Load deep learning feature extractor
         print('Loading VGG19 model...')

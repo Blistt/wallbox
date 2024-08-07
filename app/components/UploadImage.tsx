@@ -43,7 +43,7 @@ export default function UploadImage() {
         />
         <button 
           type="submit" 
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-300"
+          className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-900 transition-colors duration-300"
         >
           Upload
         </button>

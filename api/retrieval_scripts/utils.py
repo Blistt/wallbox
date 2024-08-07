@@ -59,7 +59,7 @@ def load_images(path, return_filenames=False):
   if return_filenames:
     return images, filenames
   else:
-    return images
+    return [images[-1]]
   
 
 def load_from_filenames(filenames, path='./dataset/images/'):

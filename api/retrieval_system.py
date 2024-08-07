@@ -1,45 +1,58 @@
-'''
-This file assembles the entire modularized image retrieval system that
-returns a list of neighbors given a query image.
-'''
+from flask import Flask, request, jsonify
 from pathlib import Path
 from model_loader import load_model
 from embedder import get_embeddings
 from knn_retriever import get_knn_for_query
-from utils import load_images, load_from_filenames, save_images
+from utils import load_images
 import joblib
+import traceback
 
-def retrieve_images(query_path='test_image/'):
-    # Load deep learning feature extractor
-    print('Loading VGG19 model...')
-    visual_model = load_model()
+app = Flask(__name__)
 
-    # Load and embed query image
-    print('Loading and embedding query image...')
-    query_image = load_images(query_path)
-    query_embedding = get_embeddings(visual_model, [23], query_image)
+def retrieve_images(query_path='test_image/', image_embedding_path='dataset/images/embeddings/23'):
+    try:
+        # Load deep learning feature extractor
+        print('Loading VGG19 model...')
+        visual_model = load_model()
 
-    # Load filenames
-    dir_path = Path('dataset/embeddings/23')
-    emb_filenames = [f.name for f in dir_path.glob('*') if f.is_file()]
+        # Load and embed query image
+        print('Loading and embedding query image...')
+        query_image = load_images(query_path)
+        query_embedding = get_embeddings(visual_model, [23], query_image)
 
-    # Load pre-fit knn model
-    print('Loading KNN model...')
-    knn_model = 'models/knnbr_50.joblib'
-    knnbr = joblib.load(knn_model)
+        # Load filenames
+        dir_path = Path(image_embedding_path)
+        emb_filenames = [f.name for f in dir_path.glob('*') if f.is_file()]
 
-    # Retrieve query results from knn model
-    print('Retrieving embeddings of query results...')
-    knn_emb_filenames = get_knn_for_query(query_embedding, knnbr, emb_filenames)
-    print(f'Retrieved {len(knn_emb_filenames)} embeddings')
+        # Load pre-fit knn model
+        print('Loading KNN model...')
+        knn_model = 'api/knnmodels/knnbr_50.joblib'
+        knnbr = joblib.load(knn_model)
 
-    # Function to display query results (not to be deployed, only for dev testing purposes)
-    print('Loading images from embeddings...')
-    knn_images = load_from_filenames(knn_emb_filenames, path='dataset/images/')
-    print(f'Retrieved {len(knn_images)} images')
+        # Retrieve query results from knn model
+        print('Retrieving embeddings of query results...')
+        knn_emb_filenames = get_knn_for_query(query_embedding, knnbr, emb_filenames)
+        print(f'Retrieved {len(knn_emb_filenames)} embeddings')
 
-    # Save retrieved images in a grid
-    save_images(knn_images, 'retrieved_images.png')
+        # Print filenames of retrieved images
+        for emb_filename in knn_emb_filenames:
+            print(emb_filename)
+
+        return knn_emb_filenames
+    except Exception as e:
+        print('Error:', e)
+        traceback.print_exc()
+        raise e
+
+@app.route("/api/retrieve_images", methods=["POST"])
+def api_retrieve_images():
+    query_path = request.json.get('query_path', 'public/uploaded_images/')
+    image_embedding_path = request.json.get('image_embedding_path', 'dataset/images/embeddings/23')
+    try:
+        knn_emb_filenames = retrieve_images(query_path, image_embedding_path)
+        return jsonify({"status": "success", "retrieved_images": knn_emb_filenames})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == '__main__':
-    retrieve_images()
+    app.run(debug=True)

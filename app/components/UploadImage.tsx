@@ -18,7 +18,7 @@ export default function UploadImage({ onUpload }: { onUpload: () => void }) {
     const formData = new FormData();
     formData.append('file', selectedFile);
 
-    const response = await fetch('/routes', {
+    const response = await fetch('api/routes', {
       method: 'POST',
       body: formData,
     });

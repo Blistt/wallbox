@@ -7,6 +7,7 @@ from retrieval_scripts.knn_retriever import get_knn_for_query
 from retrieval_scripts.utils import load_images
 import joblib
 import traceback
+from s3_utils.s3_retrieve import get_image_url, list_images
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -55,6 +56,12 @@ def api_retrieve_images():
         return jsonify({"status": "success", "retrieved_images": knn_emb_filenames})
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
+    
+@app.route('/api/images')
+def get_images():
+    images = list_images()
+    image_urls = [get_image_url(image) for image in images]
+    return jsonify(image_urls)
 
 if __name__ == '__main__':
     app.run(debug=True)

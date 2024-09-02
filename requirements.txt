@@ -3,3 +3,5 @@ flask-cors==4.0.1
 numpy==1.26.4
 tensorflow==2.16.1
 tqdm==4.62.3
+boto3
+axios

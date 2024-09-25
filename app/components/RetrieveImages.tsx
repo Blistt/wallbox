@@ -25,7 +25,8 @@ export default function RetrieveImagesButton({ onRetrieve }: { onRetrieve: (file
   return (
     <button 
       onClick={handleRetrieve} 
-      className="px-4 py-2 text-white rounded-md transition-colors duration-300 bg-gradient-to-r from-purple-500 to-blue-950 hover:from-pink-300 hover:to-purple-500"
+      className="px-4 py-2 text-white rounded-md transition-colors duration-300 bg-gradient-to-r 
+                from-purple-500 to-blue-950 hover:from-pink-300 hover:to-purple-500"
     >
       Retrieve Similar Images
     </button>

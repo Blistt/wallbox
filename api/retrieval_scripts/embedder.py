@@ -10,8 +10,9 @@ def get_embeddings(visual_model, f_levels, images, filenames=None):
   '''
   # Create a single string with all the f_levels
   levels = '_'.join([str(f) for f in f_levels])
-  path = Path(f'./dataset/embeddings/{levels}')
-  path.mkdir(parents=True, exist_ok=True)
+  if filenames is not None:
+    path = Path(f'./dataset/embeddings/{levels}')
+    path.mkdir(parents=True, exist_ok=True)
   # Initialize embeddings
   E = []
   for i, img in enumerate(images):

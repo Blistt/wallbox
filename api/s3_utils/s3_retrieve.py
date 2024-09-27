@@ -1,20 +1,24 @@
 import boto3
-from botocore.exceptions import ClientError
+from botocore.exceptions import ClientError 
 from dotenv import load_dotenv
 import os
 
 
 def get_image_url(object_name):
-    load_dotenv()  # This loads the variables from .env
+    load_dotenv()
 
     aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
     aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
     aws_bucket_name = os.getenv('AWS_BUCKET_NAME')
+    aws_region_name = os.getenv('AWS_REGION') 
 
     """Generate a presigned URL for the S3 object"""
     s3_client = boto3.client('s3',
+                             region_name=aws_region_name, 
                              aws_access_key_id=aws_access_key_id,
-                             aws_secret_access_key=aws_secret_access_key)
+                             aws_secret_access_key=aws_secret_access_key,
+                             config=boto3.session.Config(signature_version='s3v4'))
+
     try:
         response = s3_client.generate_presigned_url('get_object',
                                                     Params={'Bucket': aws_bucket_name,
@@ -24,6 +28,7 @@ def get_image_url(object_name):
         print(e)
         return None
     return response
+
 
 def list_images():
     load_dotenv()  # This loads the variables from .env

@@ -41,7 +41,6 @@ public/dataset
 api/knnmodels
 
 # python backend
-config.py
 .env
 quickfixes.ipynb
 

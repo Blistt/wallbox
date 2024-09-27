@@ -1,24 +1,35 @@
-"use client";
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-export default function RetrieveImagesButton({ onRetrieve }: { onRetrieve: (filenames: string[]) => void }) {
+export default function RetrieveImagesButton({ onRetrieve }: { onRetrieve: (urls: Record<string, string>) => void }) {
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleRetrieve = async () => {
-    const response = await fetch('http://127.0.0.1:5328/api/retrieve_images', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query_path: 'public/uploaded_images/',
-        image_path: 'public/dataset/images/',
-      }),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      onRetrieve(data.retrieved_images);
-    } else {
-      console.error('Error retrieving images');
+    console.log('Button clicked'); // Debug log
+    setIsLoading(true);
+    try {
+      console.log('Sending request to server'); // Debug log
+      const response = await fetch('http://127.0.0.1:5328/api/retrieve_images', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query_path: 'public/uploaded_images/',
+          image_embedding_path: 'public/dataset/embeddings/23',
+        }),
+      });
+      console.log('Received response from server'); // Debug log
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Retrieved data:', data); // Debug log
+        onRetrieve(data);
+      } else {
+        console.error('Error retrieving images');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -27,9 +38,9 @@ export default function RetrieveImagesButton({ onRetrieve }: { onRetrieve: (file
       onClick={handleRetrieve} 
       className="px-4 py-2 text-white rounded-md transition-colors duration-300 bg-gradient-to-r 
                 from-purple-500 to-blue-950 hover:from-pink-300 hover:to-purple-500"
+      disabled={isLoading}
     >
-      Retrieve Similar Images
+      {isLoading ? 'Retrieving...' : 'Retrieve Similar Images'}
     </button>
   );
-  
 }

@@ -1,25 +1,29 @@
 "use client";
+
 import React, { useState } from 'react';
 import UploadImage from './components/UploadImage';
 import RetrieveImages from './components/RetrieveImages';
 import ImageGrid from './components/ImageGrid';
 
 export default function Home() {
-  const [filenames, setFilenames] = useState<string[]>([]);
+  const [imageUrls, setImageUrls] = useState<Record<string, string>>({});
 
-  const handleRetrieve = (retrievedFilenames: string[]) => {
-    setFilenames(retrievedFilenames);
+  const handleRetrieve = (retrievedUrls: Record<string, string>) => {
+    console.log('handleRetrieve called with:', retrievedUrls); // Debug log
+    setImageUrls(retrievedUrls);
   };
 
   const handleUpload = () => {
-    setFilenames([]); // Clear the filenames state
+    setImageUrls({});
   };
 
   return (
-    <div className="flex flex-col items-center p-4 space-y-4">
-      <UploadImage onUpload={handleUpload} />
-      <RetrieveImages onRetrieve={handleRetrieve} />
-      {filenames.length > 0 && <ImageGrid filenames={filenames} />}
-    </div>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
+        <UploadImage onUpload={handleUpload} />
+        <RetrieveImages onRetrieve={handleRetrieve} />
+      </div>
+      {Object.keys(imageUrls).length > 0 && <ImageGrid imageUrls={imageUrls} />}
+    </main>
   );
 }

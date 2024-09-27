@@ -18,6 +18,7 @@ s3_client = boto3.client('s3',
 
 file_mapping = {}
 
+
 def upload_file(file_name, object_name=None):
     if object_name is None:
         object_name = file_name
@@ -30,6 +31,7 @@ def upload_file(file_name, object_name=None):
     except ClientError as e:
         print(f"Error uploading {file_name}: {e}")
         return False
+
 
 def upload_directory(directory):
     print(f"Starting upload of directory: {directory}")

@@ -21,11 +21,12 @@ def get_knn_for_query(query_embedding, knnbr, filenames):
   knn_filenames = []
   # Retrieve the k nearest neighbor images of the query image 
   print(f'there are {len(filenames)} filenames')
-  for i in knn[1][0][1:]:
+  for i in knn[1][0][0:]:
     filename = filenames[i].split('.')[0]
     knn_filenames.append(filename)
 
   return knn_filenames
+
 
 def retrieve_images(query_path='public/uploaded_images/', image_embedding_path='public/dataset/embeddings/23'):
     try:

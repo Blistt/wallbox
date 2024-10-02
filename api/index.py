@@ -19,11 +19,15 @@ def api_retrieve_images():
             mapping = json.load(f)
     
         # Get pre-signed S3 urls
-        urls = {}
-        for filename in knn_emb_filenames:
+        urls = []
+        for i, filename in enumerate(knn_emb_filenames):
             s3_filename = mapping.get(filename)
-            urls[filename] = get_image_url(s3_filename)
-        return jsonify(urls)
+            url = get_image_url(s3_filename)
+            urls.append({'filename': filename, 'url': url, 'order': i})
+
+        print('Final order of urls', [url['filename'] for url in urls])
+
+        return jsonify({'images':urls})
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500

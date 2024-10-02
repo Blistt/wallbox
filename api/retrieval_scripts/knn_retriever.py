@@ -21,8 +21,10 @@ def get_knn_for_query(query_embedding, knnbr, filenames):
   knn_filenames = []
   # Retrieve the k nearest neighbor images of the query image 
   print(f'there are {len(filenames)} filenames')
-  for i in knn[1][0][0:]:
-    filename = filenames[i].split('.')[0]
+  for i, index in enumerate(knn[1][0][0:]):
+    filename = filenames[index].split('.')[0]
+    distance = knn[0][0][i]
+    print(f'filename: {filename}, distance: {distance}')
     knn_filenames.append(filename)
 
   return knn_filenames
@@ -52,10 +54,6 @@ def retrieve_images(query_path='public/uploaded_images/', image_embedding_path='
         print('Retrieving embeddings of query results...')
         knn_emb_filenames = get_knn_for_query(query_embedding, knnbr, emb_filenames)
         print(f'Retrieved {len(knn_emb_filenames)} embeddings')
-
-        # Print filenames of retrieved images
-        for emb_filename in knn_emb_filenames:
-            print(emb_filename)
 
         return knn_emb_filenames
     except Exception as e:

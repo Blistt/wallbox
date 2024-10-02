@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 
-export default function RetrieveImagesButton({ onRetrieve }: { onRetrieve: (urls: Record<string, string>) => void }) {
+interface ImageInfo {
+  filename: string;
+  url: string;
+  order: number;
+}
+
+export default function RetrieveImagesButton({ onRetrieve }: { onRetrieve: (images: ImageInfo[]) => void }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleRetrieve = async () => {
@@ -22,7 +28,13 @@ export default function RetrieveImagesButton({ onRetrieve }: { onRetrieve: (urls
       if (response.ok) {
         const data = await response.json();
         console.log('Retrieved data:', data); // Debug log
-        onRetrieve(data);
+        
+        // Sort the images based on the 'order' field
+        const sortedImages = data.images.sort((a: ImageInfo, b: ImageInfo) => a.order - b.order);
+        
+        console.log('Sorted images:', sortedImages.map((img: ImageInfo) => img.filename)); // Debug log
+        
+        onRetrieve(sortedImages);
       } else {
         console.error('Error retrieving images');
       }

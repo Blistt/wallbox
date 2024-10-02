@@ -22,7 +22,7 @@ def get_image_url(object_name):
     try:
         response = s3_client.generate_presigned_url('get_object',
                                                     Params={'Bucket': aws_bucket_name,
-                                                            'Key': object_name},
+                                                            'Key': f'images/{object_name}'},
                                                     ExpiresIn=3600)
     except ClientError as e:
         print(e)
